@@ -14,21 +14,22 @@ services:
     environment:
       - TZ=Asia/Tokyo
 
-  # frontend:
-  #   build: ./frontend
-  #   volumes:
-  #     - ./frontend/src:/src
-  #     - node_modules:/src/node_modules
-  #     - ./api_server/graph:/src/graph
-  #   ports:
-  #     - 3002:3000
-  #     - 6007:6006
-  #   environment:
-  #     - DISPLAY=0
-  #     - WATCHPACK_POLLING=true
-  #   restart: always
-  #   tty: true
-  #   stdin_open: true
+  frontend:
+    container_name: frontend
+    build: ./frontend
+    volumes:
+      - ./frontend:/src
+      - node_modules:/src/node_modules
+      - ./api_server/graph:/src/graph
+    ports:
+      - 5173:5173
+      - 6007:6006
+    environment:
+      - DISPLAY=0
+      - WATCHPACK_POLLING=true
+    restart: always
+    tty: true
+    stdin_open: true
 
   db:
     image: mysql:8.0.28
