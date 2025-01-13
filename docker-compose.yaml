@@ -27,6 +27,7 @@ services:
     environment:
       - DISPLAY=0
       - WATCHPACK_POLLING=true
+      - PORT=5173
     restart: always
     tty: true
     stdin_open: true
