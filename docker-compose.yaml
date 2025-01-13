@@ -1,0 +1,47 @@
+version: '3.9'
+services:
+  api_server:
+    container_name: api_server
+    build:
+      context: ./api_server
+    volumes:
+      - ./api_server:/app
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    tty: true # コンテナの永続化
+    environment:
+      - TZ=Asia/Tokyo
+
+  # frontend:
+  #   build: ./frontend
+  #   volumes:
+  #     - ./frontend/src:/src
+  #     - node_modules:/src/node_modules
+  #     - ./api_server/graph:/src/graph
+  #   ports:
+  #     - 3002:3000
+  #     - 6007:6006
+  #   environment:
+  #     - DISPLAY=0
+  #     - WATCHPACK_POLLING=true
+  #   restart: always
+  #   tty: true
+  #   stdin_open: true
+
+  db:
+    image: mysql:8.0.28
+    container_name: db
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=react_router_v7_practice
+      - TZ=Asia/Tokyo
+    volumes:
+      - ./db/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./mysql:/var/lib/mysql
+
+volumes:
+  node_modules:
