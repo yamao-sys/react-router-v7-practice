@@ -1,0 +1,77 @@
+name: Playwright Tests
+on:
+  pull_request:
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: mysql:8.0.28
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: react_router_v7_practice_test
+          TZ: 'Asia/Tokyo'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.23'
+
+      - name: Install API Server dependencies
+        working-directory: ./api_server
+        run: |
+          go mod tidy
+          go install github.com/rubenv/sql-migrate/...@latest
+          go install github.com/joho/godotenv/cmd/godotenv@latest
+
+      - name: Copy env file
+        run: |
+          sudo mkdir /app
+          sudo cp ./api_server/.env.test /app/.env.test
+
+      - name: Setup test database
+        working-directory: ./api_server/db
+        run: godotenv -f /app/.env.test sql-migrate up -env="mysql"
+
+      - name: Boot API Server
+        working-directory: ./api_server
+        run: godotenv -f /app/.env.test go run server.go &
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Install Frontend dependencies
+        working-directory: ./frontend
+        run: npm install
+
+      - name: Boot Frontend server
+        working-directory: ./frontend
+        run: NODE_ENV=test PORT=5174 npm run dev &
+
+      - name: Install Frontend dependencies
+        working-directory: ./frontend
+        run: npx playwright install --with-deps
+
+      - name: Run E2E
+        working-directory: ./frontend
+        env:
+          CI: true
+        run: npm run e2e
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30

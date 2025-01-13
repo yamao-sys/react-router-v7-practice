@@ -14,7 +14,7 @@ export default defineConfig({
   plugins: [reactRouter(), tsconfigPaths()],
   server: {
     host: "0.0.0.0",
-    port: 5173,
+    port: Number(process.env.PORT),
   },
   resolve: {
     alias: {
