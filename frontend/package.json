@@ -10,8 +10,7 @@
     "lint": "eslint './**/*.{js,jsx,ts,tsx,json}'",
     "lint:fix": "eslint --fix './**/*.{js,jsx,ts,tsx,json}'",
     "format": "prettier  --check './**/*.{ts,tsx}'",
-    "format:fix": "prettier --write './**/*.{js,jsx,ts,tsx,json}'",
-    "tsc": "tsc --noEmit"
+    "format:fix": "prettier --write './**/*.{js,jsx,ts,tsx,json}'"
   },
   "dependencies": {
     "@react-router/node": "^7.1.1",
