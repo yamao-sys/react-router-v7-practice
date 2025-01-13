@@ -1,0 +1,47 @@
+type User {
+	id: ID!
+	name: String!
+	email: String!
+	createdAt: DateTime!
+	updatedAt: DateTime!
+	nameAndEmail: String!
+}
+
+input SignUpInput {
+	name: String!
+	email: String!
+	password: String!
+}
+
+input SignInInput {
+	email: String!
+	password: String!
+}
+
+type SignUpValidationError {
+	name: [String!]!
+	email: [String!]!
+	password: [String!]!
+}
+
+type SignUpResponse {
+	user: User!
+	validationErrors: SignUpValidationError!
+}
+
+type SignInResponse {
+	validationError: String!
+}
+
+type CheckSignedInResponse {
+	isSignedIn: Boolean!
+}
+
+extend type Query {
+	checkSignedIn: CheckSignedInResponse!
+}
+
+extend type Mutation {
+	signUp(input: SignUpInput!): SignUpResponse!
+	signIn(input: SignInInput!): SignInResponse!
+}
