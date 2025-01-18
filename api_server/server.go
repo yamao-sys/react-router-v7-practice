@@ -18,7 +18,7 @@ const defaultPort = "8080"
 func main() {
 	loadEnv()
 
-	port := os.Getenv("PORT")
+	port := os.Getenv("SERVER_PORT")
 	if port == "" {
 		port = defaultPort
 	}
