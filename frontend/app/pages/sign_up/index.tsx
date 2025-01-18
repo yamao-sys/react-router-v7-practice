@@ -1,11 +1,12 @@
-import { useEffect, useRef } from "react"
+import { useRef } from "react"
 import { BoxInputForm } from "@/components/molucules/BoxInputForm"
 import { SubmitButton } from "@/components/molucules/SubmitButton"
 import { gql } from "@apollo/client"
-import { useFetcher } from "react-router"
+import { redirect, useFetcher } from "react-router"
 import { SignUp_ValidationErrorFragment, SignUpDocument, SignUpMutation } from "./__generated__"
 import { Route } from "./+types"
 import { graphQLClient } from "@/lib/graphQLClient"
+import { NAVIGATION_PATH_LIST } from "@/app/routes"
 
 gql`
   mutation signUp($input: SignUpInput!) {
@@ -51,9 +52,12 @@ export async function action({ request }: Route.ActionArgs) {
     },
   })
 
+  if (!!data?.signUp.user.id) {
+    return redirect(`/${NAVIGATION_PATH_LIST.signInPage}`)
+  }
+
   return {
     validationErrors: data?.signUp.validationErrors ?? { name: [], email: [], password: [] },
-    success: !!data?.signUp.user.id,
   }
 }
 
@@ -64,17 +68,6 @@ export default function SignUpPage() {
   }>()
   const formRef = useRef<HTMLFormElement>(null)
   const validationErrors = fetcher.data?.validationErrors ?? { name: [], email: [], password: [] }
-  const success = fetcher.data?.success ?? false
-
-  useEffect(() => {
-    if (fetcher.state !== "idle") return
-
-    if (success) {
-      window.alert("ユーザ登録に成功しました！")
-      formRef.current?.reset()
-      // TODO: ログインフォームへリダイレクト
-    }
-  }, [fetcher.state])
 
   return (
     <div className='p-4 md:p-16'>
