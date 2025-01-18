@@ -10,7 +10,6 @@ import { fileURLToPath } from "url"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const envFilePath = process.env.CI ? ".env.test" : ".env.test.local"
-console.log(envFilePath)
 dotenv.config({ path: path.resolve(__dirname, envFilePath) })
 
 /**

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+docker-compose -f docker-compose.e2e.yaml up -d
+
 # テスト実行
 docker-compose -f docker-compose.e2e.yaml run --rm frontend_test sh -c 'sh e2e-entrypoint.sh && npm run e2e'
 
