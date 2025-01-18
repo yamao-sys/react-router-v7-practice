@@ -55,10 +55,6 @@ jobs:
         working-directory: ./frontend
         run: npm install
 
-      - name: Boot Frontend server
-        working-directory: ./frontend
-        run: NODE_ENV=test PORT=5174 npm run dev &
-
       - name: Install Frontend dependencies
         working-directory: ./frontend
         run: npx playwright install --with-deps
