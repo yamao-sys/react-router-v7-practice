@@ -44,10 +44,7 @@ jobs:
 
       - name: Boot API Server
         working-directory: ./api_server
-        env:
-          ENV_FILE_PATH: .env.test
-          CI: true
-        run: go run server.go &
+        run: ENV_FILE_PATH=.env.test go run server.go &
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
