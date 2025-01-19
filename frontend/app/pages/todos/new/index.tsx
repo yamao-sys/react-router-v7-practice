@@ -13,6 +13,7 @@ import { useRef } from "react"
 import { BoxInputForm } from "@/components/molucules/BoxInputForm"
 import { SubmitButton } from "@/components/molucules/SubmitButton"
 import { NAVIGATION_PATH_LIST } from "@/app/routes"
+import { TodosFormLayout } from "../components/TodosFormLayout"
 
 gql`
   mutation createTodo($input: CreateTodoInput!) {
@@ -61,32 +62,26 @@ export default function TodosNewPage() {
   const validationErrors = fetcher.data?.validationErrors ?? { title: [], content: [] }
 
   return (
-    <TodosLayout>
-      <div className='p-4 md:p-16'>
-        <div className='md:w-3/5 mx-auto'>
-          <h3 className='mt-16 w-full text-center text-2xl font-bold'>Todo作成</h3>
+    <TodosFormLayout header='TODO作成'>
+      <fetcher.Form ref={formRef} method='post'>
+        <BoxInputForm
+          labelId='title'
+          labelText='タイトル'
+          name='title'
+          validationErrorMessages={validationErrors.title}
+          needsMargin={true}
+        />
 
-          <fetcher.Form ref={formRef} method='post'>
-            <BoxInputForm
-              labelId='title'
-              labelText='タイトル'
-              name='title'
-              validationErrorMessages={validationErrors.title}
-              needsMargin={true}
-            />
+        <BoxInputForm
+          labelId='content'
+          labelText='内容'
+          name='content'
+          validationErrorMessages={validationErrors.content}
+          needsMargin={true}
+        />
 
-            <BoxInputForm
-              labelId='content'
-              labelText='内容'
-              name='content'
-              validationErrorMessages={validationErrors.content}
-              needsMargin={true}
-            />
-
-            <SubmitButton labelText='登録する' color='green' />
-          </fetcher.Form>
-        </div>
-      </div>
-    </TodosLayout>
+        <SubmitButton labelText='登録する' color='green' />
+      </fetcher.Form>
+    </TodosFormLayout>
   )
 }
