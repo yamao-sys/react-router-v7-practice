@@ -5,6 +5,7 @@ export const NAVIGATION_PATH_LIST = {
   signUpPage: "sign_up",
   signInPage: "sign_in",
   todosPage: "todos",
+  todosNewPage: "todos/new",
 }
 
 export default [
@@ -12,4 +13,5 @@ export default [
   route(NAVIGATION_PATH_LIST.signUpPage, "pages/sign_up/index.tsx"),
   route(NAVIGATION_PATH_LIST.signInPage, "pages/sign_in/index.tsx"),
   route(NAVIGATION_PATH_LIST.todosPage, "pages/todos/index.tsx"),
+  route(NAVIGATION_PATH_LIST.todosNewPage, "pages/todos/new/index.tsx"),
 ] satisfies RouteConfig

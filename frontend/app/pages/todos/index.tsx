@@ -4,7 +4,8 @@ import { Route } from "./+types"
 import { graphQLClient } from "@/lib/graphQLClient"
 import { FetchTodoListsDocument, FetchTodoListsQuery } from "./__generated__"
 import { useLoaderData } from "react-router"
-import { authCookie } from "@/lib/authCookie"
+import { authCookie, getAuthHeader } from "@/lib/authCookie"
+import { TodosLayout } from "./layout"
 
 gql`
   query fetchTodoLists {
@@ -15,11 +16,9 @@ gql`
 `
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const token = await authCookie.parse(request.headers.get("Cookie"))
-  const cookie = await authCookie.serialize("")
-  const updatedCookie = cookie.replace(/token=[^;]*/, `token=${token}`)
+  const cookie = await getAuthHeader(request)
 
-  const { data } = await graphQLClient(updatedCookie).query<FetchTodoListsQuery>({
+  const { data } = await graphQLClient(cookie).query<FetchTodoListsQuery>({
     query: FetchTodoListsDocument,
   })
 
@@ -30,8 +29,10 @@ export default function TodosPage() {
   const { todos } = useLoaderData<typeof loader>()
 
   return (
-    <div className='mt-16'>
-      <TodosList todos={todos} />
-    </div>
+    <TodosLayout>
+      <div className='mt-16'>
+        <TodosList todos={todos} />
+      </div>
+    </TodosLayout>
   )
 }
