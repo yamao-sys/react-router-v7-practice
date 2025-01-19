@@ -39,7 +39,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return (
-    <ApolloProvider client={graphQLClient}>
+    <ApolloProvider client={graphQLClient()}>
       <Outlet />
     </ApolloProvider>
   )
