@@ -1,5 +1,4 @@
 import { gql } from "@apollo/client"
-import { TodosLayout } from "../layout"
 import { Route } from "./+types"
 import { getAuthHeader } from "@/lib/authCookie"
 import { graphQLClient } from "@/lib/graphQLClient"
