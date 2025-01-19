@@ -89,6 +89,7 @@ export type SignInInput = {
 
 export type SignInResponse = {
   __typename?: "SignInResponse"
+  token: Scalars["String"]["output"]
   validationError: Scalars["String"]["output"]
 }
 

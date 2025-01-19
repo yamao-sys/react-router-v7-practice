@@ -38,6 +38,7 @@ type SignInInput struct {
 
 type SignInResponse struct {
 	ValidationError string `json:"validationError"`
+	Token           string `json:"token"`
 }
 
 type SignUpInput struct {
