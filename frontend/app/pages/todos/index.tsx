@@ -4,7 +4,7 @@ import { Route } from "./+types"
 import { graphQLClient } from "@/lib/graphQLClient"
 import { FetchTodoListsDocument, FetchTodoListsQuery } from "./__generated__"
 import { useLoaderData } from "react-router"
-import { authCookie, getAuthHeader } from "@/lib/authCookie"
+import { getAuthHeader } from "@/lib/authCookie"
 import { TodosLayout } from "./layout"
 
 gql`
