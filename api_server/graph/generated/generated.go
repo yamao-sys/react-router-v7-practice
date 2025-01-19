@@ -78,6 +78,7 @@ type ComplexityRoot struct {
 	}
 
 	SignInResponse struct {
+		Token           func(childComplexity int) int
 		ValidationError func(childComplexity int) int
 	}
 
@@ -284,6 +285,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.FetchTodoLists(childComplexity), true
+
+	case "SignInResponse.token":
+		if e.complexity.SignInResponse.Token == nil {
+			break
+		}
+
+		return e.complexity.SignInResponse.Token(childComplexity), true
 
 	case "SignInResponse.validationError":
 		if e.complexity.SignInResponse.ValidationError == nil {
@@ -633,6 +641,7 @@ type SignUpResponse {
 
 type SignInResponse {
 	validationError: String!
+	token: String!
 }
 
 type CheckSignedInResponse {
@@ -1393,6 +1402,8 @@ func (ec *executionContext) fieldContext_Mutation_signIn(ctx context.Context, fi
 			switch field.Name {
 			case "validationError":
 				return ec.fieldContext_SignInResponse_validationError(ctx, field)
+			case "token":
+				return ec.fieldContext_SignInResponse_token(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type SignInResponse", field.Name)
 		},
@@ -1747,6 +1758,50 @@ func (ec *executionContext) _SignInResponse_validationError(ctx context.Context,
 }
 
 func (ec *executionContext) fieldContext_SignInResponse_validationError(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SignInResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SignInResponse_token(ctx context.Context, field graphql.CollectedField, obj *model.SignInResponse) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SignInResponse_token(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Token, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SignInResponse_token(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SignInResponse",
 		Field:      field,
@@ -4982,6 +5037,11 @@ func (ec *executionContext) _SignInResponse(ctx context.Context, sel ast.Selecti
 			out.Values[i] = graphql.MarshalString("SignInResponse")
 		case "validationError":
 			out.Values[i] = ec._SignInResponse_validationError(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "token":
+			out.Values[i] = ec._SignInResponse_token(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}

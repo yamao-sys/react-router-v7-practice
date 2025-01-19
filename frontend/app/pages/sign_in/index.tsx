@@ -8,11 +8,13 @@ import { SignInDocument, SignInMutation } from "./__generated__"
 import { Route } from "./+types"
 import { graphQLClient } from "@/lib/graphQLClient"
 import { NAVIGATION_PATH_LIST } from "@/app/routes"
+import { authCookie } from "@/lib/authCookie"
 
 gql`
   mutation signIn($input: SignInInput!) {
     signIn(input: $input) {
       validationError
+      token
     }
   }
 `
@@ -21,7 +23,7 @@ export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData()
   const signInInputs = Object.fromEntries(formData)
 
-  const { data } = await graphQLClient.mutate<SignInMutation>({
+  const { data } = await graphQLClient().mutate<SignInMutation>({
     mutation: SignInDocument,
     variables: {
       input: {
@@ -31,8 +33,12 @@ export async function action({ request }: Route.ActionArgs) {
     },
   })
 
-  if (!data?.signIn.validationError) {
-    return redirect(NAVIGATION_PATH_LIST.top)
+  if (data?.signIn.token) {
+    return redirect(`/${NAVIGATION_PATH_LIST.todosPage}`, {
+      headers: {
+        "Set-Cookie": await authCookie.serialize(data?.signIn.token),
+      },
+    })
   }
 
   return {

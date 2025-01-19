@@ -10,6 +10,7 @@ import (
 	"app/lib/auth"
 	models "app/models/generated"
 	"context"
+	"fmt"
 )
 
 // SignUp is the resolver for the signUp field.
@@ -29,7 +30,8 @@ func (r *mutationResolver) SignIn(ctx context.Context, input model.SignInInput) 
 	if validationError != nil {
 		responseValidationError = validationError.Error()
 	}
-	return &model.SignInResponse{ValidationError: responseValidationError}, err
+	fmt.Println(token)
+	return &model.SignInResponse{ValidationError: responseValidationError, Token: token}, err
 }
 
 // CheckSignedIn is the resolver for the checkSignedIn field.

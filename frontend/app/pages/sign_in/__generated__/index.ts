@@ -9,13 +9,14 @@ export type SignInMutationVariables = SchemaTypes.Exact<{
 
 export type SignInMutation = {
   __typename?: "Mutation"
-  signIn: { __typename?: "SignInResponse"; validationError: string }
+  signIn: { __typename?: "SignInResponse"; validationError: string; token: string }
 }
 
 export const SignInDocument = gql`
   mutation signIn($input: SignInInput!) {
     signIn(input: $input) {
       validationError
+      token
     }
   }
 `
