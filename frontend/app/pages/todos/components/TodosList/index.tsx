@@ -2,7 +2,7 @@ import { gql } from "@apollo/client"
 import { TodosList_TodoFragment } from "./__generated__"
 import { FC } from "react"
 import { BaseButton } from "@/components/atoms/BaseButton"
-import { useNavigate } from "react-router"
+import { FetcherWithComponents, useNavigate } from "react-router"
 
 gql`
   fragment TodosList_Todo on Todo {
@@ -21,22 +21,24 @@ gql`
 
 type Props = {
   todos: Array<TodosList_TodoFragment>
+  fetcher: FetcherWithComponents<{ success: boolean }>
 }
 
-export const TodosList: FC<Props> = ({ todos }: Props) => {
+export const TodosList: FC<Props> = ({ todos, fetcher }: Props) => {
   const navigate = useNavigate()
 
-  const handleRouteToEditPage = (id: string) => navigate(`/todos/${id}`)
-
   const handleDeleteTodo = async (id: string) => {
-    const title = todos.find((todo) => todo.id === id)
-    if (!window.confirm(`${title?.title}を本当に削除しますか?`)) {
+    const todo = todos.find((t) => t.id === id)
+
+    if (!window.confirm(`${todo?.title}を本当に削除しますか?`)) {
       return
     }
 
-    window.alert(`${title?.title}の削除に成功しました!`)
-    navigate("/todos")
+    // サーバーに削除リクエストを送信
+    await fetcher.submit({ id }, { method: "post" })
   }
+
+  const handleRouteToEditPage = (id: string) => navigate(`/todos/${id}`)
 
   return (
     <>
