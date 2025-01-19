@@ -20,6 +20,7 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "."),
       "@apollo/client/link/error": "@apollo/client/link/error/index.js",
+      "@apollo/client/link/context": "@apollo/client/link/context/index.js",
       "@apollo/client": "@apollo/client/index.js",
     },
   },
