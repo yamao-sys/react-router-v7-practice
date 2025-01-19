@@ -41,7 +41,7 @@ export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData()
   const signUpInputs = Object.fromEntries(formData)
 
-  const { data } = await graphQLClient.mutate<SignUpMutation>({
+  const { data } = await graphQLClient().mutate<SignUpMutation>({
     mutation: SignUpDocument,
     variables: {
       input: {
