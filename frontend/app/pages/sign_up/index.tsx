@@ -6,7 +6,7 @@ import { redirect, useFetcher } from "react-router"
 import { SignUp_ValidationErrorFragment, SignUpDocument, SignUpMutation } from "./__generated__"
 import { Route } from "./+types"
 import { graphQLClient } from "@/lib/graphQLClient"
-import { NAVIGATION_PATH_LIST } from "@/app/routes"
+import { NAVIGATION_PAGE_LIST } from "@/app/routes"
 
 gql`
   mutation signUp($input: SignUpInput!) {
@@ -53,7 +53,7 @@ export async function action({ request }: Route.ActionArgs) {
   })
 
   if (!!data?.signUp.user.id) {
-    return redirect(`/${NAVIGATION_PATH_LIST.signInPage}`)
+    return redirect(NAVIGATION_PAGE_LIST.signInPage)
   }
 
   return {

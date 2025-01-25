@@ -3,6 +3,7 @@ import { TodosList_TodoFragment } from "./__generated__"
 import { FC } from "react"
 import { BaseButton } from "@/components/atoms/BaseButton"
 import { FetcherWithComponents, useNavigate } from "react-router"
+import { NAVIGATION_PAGE_LIST } from "@/app/routes"
 
 gql`
   fragment TodosList_Todo on Todo {
@@ -38,7 +39,7 @@ export const TodosList: FC<Props> = ({ todos, fetcher }: Props) => {
     await fetcher.submit({ id }, { method: "post" })
   }
 
-  const handleRouteToEditPage = (id: string) => navigate(`/todos/${id}`)
+  const handleRouteToEditPage = (id: string) => navigate(`${NAVIGATION_PAGE_LIST.todosPage}/${id}`)
 
   return (
     <>
