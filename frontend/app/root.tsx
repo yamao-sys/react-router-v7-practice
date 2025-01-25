@@ -4,6 +4,7 @@ import type { Route } from "./+types/root"
 import stylesheet from "./app.css?url"
 import { ApolloProvider } from "@apollo/client"
 import { graphQLClient } from "@/lib/graphQLClient"
+import { AuthProvider } from "@/contexts/AuthContext"
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -39,9 +40,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return (
-    <ApolloProvider client={graphQLClient()}>
-      <Outlet />
-    </ApolloProvider>
+    <AuthProvider>
+      <ApolloProvider client={graphQLClient()}>
+        <Outlet />
+      </ApolloProvider>
+    </AuthProvider>
   )
 }
 
