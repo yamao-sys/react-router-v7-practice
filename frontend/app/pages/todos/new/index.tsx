@@ -11,7 +11,7 @@ import { redirect, useFetcher } from "react-router"
 import { useRef } from "react"
 import { BoxInputForm } from "@/components/molucules/BoxInputForm"
 import { SubmitButton } from "@/components/molucules/SubmitButton"
-import { NAVIGATION_PATH_LIST } from "@/app/routes"
+import { NAVIGATION_PAGE_LIST } from "@/app/routes"
 import { TodosFormLayout } from "../components/TodosFormLayout"
 
 gql`
@@ -45,7 +45,7 @@ export async function action({ request }: Route.ActionArgs) {
   })
 
   if (!!data?.createTodo.id) {
-    return redirect(`/${NAVIGATION_PATH_LIST.todosPage}`)
+    return redirect(NAVIGATION_PAGE_LIST.todosPage)
   }
 
   return {

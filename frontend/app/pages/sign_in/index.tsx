@@ -7,7 +7,7 @@ import { redirect, useFetcher } from "react-router"
 import { SignInDocument, SignInMutation } from "./__generated__"
 import { Route } from "./+types"
 import { graphQLClient } from "@/lib/graphQLClient"
-import { NAVIGATION_PATH_LIST } from "@/app/routes"
+import { NAVIGATION_PAGE_LIST } from "@/app/routes"
 import { authCookie } from "@/lib/authCookie"
 
 gql`
@@ -34,7 +34,7 @@ export async function action({ request }: Route.ActionArgs) {
   })
 
   if (data?.signIn.token) {
-    return redirect(`/${NAVIGATION_PATH_LIST.todosPage}`, {
+    return redirect(NAVIGATION_PAGE_LIST.todosPage, {
       headers: {
         "Set-Cookie": await authCookie.serialize(data?.signIn.token),
       },

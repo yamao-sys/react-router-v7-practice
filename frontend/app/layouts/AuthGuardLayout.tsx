@@ -1,8 +1,8 @@
-import type { Route } from "./+types/home"
+import { Outlet, useLoaderData, useNavigate } from "react-router"
+import { Route } from "../+types/root"
 import { getAuthHeader } from "@/lib/authCookie"
 import { graphQLClient } from "@/lib/graphQLClient"
 import { CheckSignedInDocument, CheckSignedInQuery } from "@/graphql/__generated__/checkAuth"
-import { useLoaderData, useNavigate } from "react-router"
 import { useEffect } from "react"
 import { NAVIGATION_PAGE_LIST } from "../routes"
 
@@ -16,28 +16,20 @@ export async function loader({ request }: Route.LoaderArgs) {
   return { isSignedIn: data.checkSignedIn.isSignedIn }
 }
 
-export function meta({}: Route.MetaArgs) {
-  return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
-  ]
-}
-
-export default function Home() {
+export default function AuthGuardLayout() {
   const navigate = useNavigate()
   const { isSignedIn } = useLoaderData<typeof loader>()
 
   useEffect(() => {
-    const doNavigatePath = isSignedIn
-      ? NAVIGATION_PAGE_LIST.todosPage
-      : NAVIGATION_PAGE_LIST.signInPage
+    if (isSignedIn) return
 
-    navigate(doNavigatePath)
+    // NOTE: ログインが必要だが未ログインの時、ログインページへリダイレクト
+    navigate(NAVIGATION_PAGE_LIST.signInPage)
   }, [navigate, isSignedIn])
 
   return (
     <>
-      <p>Loading ...</p>
+      <Outlet />
     </>
   )
 }

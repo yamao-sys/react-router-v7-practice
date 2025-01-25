@@ -14,7 +14,7 @@ import {
 import { TodosFormLayout } from "../components/TodosFormLayout"
 import { BoxInputForm } from "@/components/molucules/BoxInputForm"
 import { SubmitButton } from "@/components/molucules/SubmitButton"
-import { NAVIGATION_PATH_LIST } from "@/app/routes"
+import { NAVIGATION_PAGE_LIST } from "@/app/routes"
 
 gql`
   query fetchDoEditTodo($id: ID!) {
@@ -77,7 +77,7 @@ export async function action({ params, request }: Route.ActionArgs) {
   })
 
   if (!!data?.updateTodo.id) {
-    return redirect(`/${NAVIGATION_PATH_LIST.todosPage}`)
+    return redirect(NAVIGATION_PAGE_LIST.todosPage)
   }
 
   return {
