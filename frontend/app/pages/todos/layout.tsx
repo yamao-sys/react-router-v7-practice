@@ -1,3 +1,4 @@
+import { useAuthContext } from "@/contexts/AuthContext"
 import { FC, ReactNode } from "react"
 import { Link } from "react-router"
 
@@ -6,6 +7,8 @@ type Props = {
 }
 
 export const TodosLayout: FC<Props> = ({ children }: Props) => {
+  const { userName } = useAuthContext()
+
   return (
     <div className='p-4 md:p-16'>
       <div className='md:w-4/5 mx-auto'>
@@ -14,7 +17,8 @@ export const TodosLayout: FC<Props> = ({ children }: Props) => {
             <Link to='/todos'>Todo Lists</Link>
           </h1>
           <div className='flex items-end'>
-            <Link to='/todos' className='inline underline align-bottom text-xs md:text-sm'>
+            <div className='inline align-bottom text-xs md:text-sm'>{userName}さん</div>
+            <Link to='/todos' className='inline ml-4 underline align-bottom text-xs md:text-sm'>
               Todo一覧
             </Link>
             <Link to='/todos/new' className='inline ml-4 underline align-bottom text-xs md:text-sm'>

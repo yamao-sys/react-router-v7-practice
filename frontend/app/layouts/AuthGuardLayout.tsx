@@ -5,6 +5,8 @@ import { graphQLClient } from "@/lib/graphQLClient"
 import { CheckSignedInDocument, CheckSignedInQuery } from "@/graphql/__generated__/checkAuth"
 import { useEffect } from "react"
 import { NAVIGATION_PAGE_LIST } from "../routes"
+import { useAuthSetContext } from "@/contexts/AuthContext"
+import { UserDocument, UserQuery } from "@/graphql/__generated__/user"
 
 export async function loader({ request }: Route.LoaderArgs) {
   const cookie = await getAuthHeader(request)
@@ -13,19 +15,28 @@ export async function loader({ request }: Route.LoaderArgs) {
     query: CheckSignedInDocument,
   })
 
-  return { isSignedIn: data.checkSignedIn.isSignedIn }
+  const { data: d } = await graphQLClient(cookie).query<UserQuery>({
+    query: UserDocument,
+  })
+
+  return { isSignedIn: data.checkSignedIn.isSignedIn, userName: d.user.name }
 }
 
 export default function AuthGuardLayout() {
   const navigate = useNavigate()
-  const { isSignedIn } = useLoaderData<typeof loader>()
+  const { isSignedIn, userName } = useLoaderData<typeof loader>()
+
+  const { setAuth } = useAuthSetContext()
 
   useEffect(() => {
-    if (isSignedIn) return
+    if (isSignedIn) {
+      setAuth({ userName })
+      return
+    }
 
     // NOTE: ログインが必要だが未ログインの時、ログインページへリダイレクト
     navigate(NAVIGATION_PAGE_LIST.signInPage)
-  }, [navigate, isSignedIn])
+  }, [navigate, isSignedIn, userName])
 
   return (
     <>
