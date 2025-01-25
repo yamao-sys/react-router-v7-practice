@@ -76,6 +76,7 @@ export type Query = {
   checkSignedIn: CheckSignedInResponse
   fetchTodo: Todo
   fetchTodoLists: Array<Todo>
+  user: User
 }
 
 export type QueryFetchTodoArgs = {
