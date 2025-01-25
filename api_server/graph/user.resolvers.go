@@ -34,6 +34,16 @@ func (r *mutationResolver) SignIn(ctx context.Context, input model.SignInInput) 
 	return &model.SignInResponse{ValidationError: responseValidationError, Token: token}, err
 }
 
+// User is the resolver for the user field.
+func (r *queryResolver) User(ctx context.Context) (*models.User, error) {
+	user := auth.GetUser(ctx)
+	if user == nil {
+		return &models.User{}, nil
+	}
+
+	return user, nil
+}
+
 // CheckSignedIn is the resolver for the checkSignedIn field.
 func (r *queryResolver) CheckSignedIn(ctx context.Context) (*model.CheckSignedInResponse, error) {
 	user := auth.GetUser(ctx)

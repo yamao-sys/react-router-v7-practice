@@ -39,6 +39,7 @@ type CheckSignedInResponse {
 }
 
 extend type Query {
+	user: User!
 	checkSignedIn: CheckSignedInResponse!
 }
 
